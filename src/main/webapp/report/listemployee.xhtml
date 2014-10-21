@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false" id="listForm">
+            <p:panel id="panel" header="Employee List">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:dataTable id="employee" var="employee" value="#{employeeBean.allEmployees}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             paginator="true" rows="10" style="margin-bottom:20px" rowsPerPageTemplate="10,20,30">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.employeeId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.fullName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CPR"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.cpr}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Birthday"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.birthday}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Grade"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.grade}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Gender"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.gender}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Role"/>
+                        </f:facet>
+                        <h:outputText value="#{employee.role}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <h3>Export</h3>
+            <h:commandLink>
+                <p:graphicImage value="../img/excel.png" />
+                <p:dataExporter type="xls" target="employee" fileName="employee"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/pdf.png" />
+                <p:dataExporter type="pdf" target="employee" fileName="employee"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/csv.png" />
+                <p:dataExporter type="csv" target="employee" fileName="employee"/>
+            </h:commandLink>
+        </h:form>
+    </ui:define>
+</ui:composition>

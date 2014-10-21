@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel id="panel" header="New Item">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="content">
+
+                    <p:outputLabel for="barcode" value="Barcode"/>
+                    <p:inputText id="barcode" value="#{itemBean.item.barcode}" required="true"/>
+
+                    <p:outputLabel for="description" value="Description" />
+                    <p:inputText id="description" value="#{itemBean.item.description}" size="32" required="true"/>
+
+                    <p:outputLabel for="dateOfPurchase" value="Date of Purchase" />
+                    <p:calendar id="dateOfPurchase" pattern="MM/dd/yyyy" value="#{itemBean.item.dateOfPurchase}" required="true"/>
+
+                    <p:outputLabel for="remarks" value="Remarks" />
+                    <p:inputTextarea id="remarks" value="#{itemBean.item.remarks}" size="32" maxlength="255"
+                                 required="true"/>
+
+                    <p:spacer />
+                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                        <p:commandButton value="Reset" type="reset" icon="ui-icon-refresh"/>
+                        <p:commandButton value="Save" actionListener="#{itemBean.save}" ajax="true"
+                                         icon="ui-icon-disk" update="panel"/>
+                    </h:panelGrid>
+
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

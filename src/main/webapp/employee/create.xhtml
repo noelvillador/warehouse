@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel id="panel" header="New Employee">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="content">
+                    <p:outputLabel for="name" value="Username"/>
+                    <p:inputText id="name" value="#{employeeBean.employee.username}" required="true"
+                                 validator="#{employeeBean.uniqueUsername}"/>
+                    <p:outputLabel for="password" value="Password"/>
+                    <p:password id="password" value="#{employeeBean.employee.password}" match="repassword"
+                                label="Password"
+                                required="true" feedback="true" inline="true"/>
+                    <p:outputLabel for="repassword" value="Retype Password"/>
+                    <p:password id="repassword" value="#{employeeBean.employee.password}" label="Retype Password"
+                                required="true"/>
+
+                    <p:outputLabel value="CPR" for="cpr"/>
+                    <p:inputText id="cpr" value="#{employeeBean.employee.cpr}" size="32" required="true"/>
+
+                    <p:outputLabel value="Date of Birth" for="dateOfBirth"/>
+                    <p:calendar id="dateOfBirth" pattern="MM/dd/yyyy" value="#{employeeBean.employee.birthday}"
+                                required="true"/>
+
+                    <p:outputLabel value="Fullname" for="fullName"/>
+                    <p:inputText id="fullName" value="#{employeeBean.employee.fullName}" size="32" maxlength="255"
+                                 required="true"/>
+
+                    <p:outputLabel value="Grade" for="grade"/>
+                    <p:inputText id="grade" value="#{employeeBean.employee.grade}"
+                                 size="32" required="true"/>
+
+                    <p:outputLabel for="gender" value="Gender:" />
+                    <p:selectOneRadio id="gender" value="#{employeeBean.employee.gender}" required="true">
+                        <f:selectItem itemLabel="Male" itemValue="male" />
+                        <f:selectItem itemLabel="Female" itemValue="female" />
+                    </p:selectOneRadio>
+
+                    <p:outputLabel for="role" value="User Role"/>
+                    <p:selectOneRadio id="role" value="#{employeeBean.employee.role}" required="true">
+                        <f:selectItem itemValue="admin" itemLabel="Admin"/>
+                        <f:selectItem itemValue="user" itemLabel="User"/>
+                    </p:selectOneRadio>
+
+
+                    <p:spacer />
+                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:commandButton value="Reset" type="reset" icon="ui-icon-refresh"/>
+                    <p:commandButton value="Save" actionListener="#{employeeBean.save}" ajax="true"
+                                     icon="ui-icon-disk" update="panel"/>
+                    </h:panelGrid>
+
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

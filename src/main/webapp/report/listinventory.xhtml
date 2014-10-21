@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false" id="listForm">
+            <p:panel id="panel" header="Inventory List Group by Employee">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:dataTable id="employee" var="employee" value="#{employeeBean.allEmployees}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             paginator="true" rows="10" style="margin-bottom:20px" rowsPerPageTemplate="10,20,30">
+                    <f:facet name="header">
+                        Inventories
+                    </f:facet>
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column headerText="Name"/>
+                            <p:column colspan="3" headerText="Details"/>
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="Department"/>
+                            <p:column headerText="Port"/>
+                            <p:column headerText="Barcode"/>
+                            <p:column headerText="Remarks"/>
+                        </p:row>
+                    </p:columnGroup>
+
+                    <p:subTable var="inventories" value="#{employee.inventories}">
+                        <f:facet name="header">
+                            <h:outputText value="#{employee.fullName}"/>
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{inventories.department}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{inventories.port}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{inventories.item.barcode}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{inventories.item.remarks}"/>
+                        </p:column>
+                    </p:subTable>
+                </p:dataTable>
+            </p:panel>
+
+            <h3>Export</h3>
+            <h:commandLink>
+                <p:graphicImage value="../img/excel.png"/>
+                <p:dataExporter type="xls" target="employee" fileName="inventory"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/pdf.png"/>
+                <p:dataExporter type="pdf" target="employee" fileName="inventory"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/csv.png"/>
+                <p:dataExporter type="csv" target="employee" fileName="inventory"/>
+            </h:commandLink>
+        </h:form>
+    </ui:define>
+</ui:composition>

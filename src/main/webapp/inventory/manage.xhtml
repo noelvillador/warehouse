@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false" id="listForm">
+            <p:panel id="panel" header="Search Inventory">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="content">
+                    <h:outputText value="Department: "/>
+                    <p:autoComplete value="#{inventoryBean.department}"
+                                    completeMethod="#{inventoryBean.getByDepartment}"/>
+                    <p:commandButton value="Search" actionListener="#{inventoryBean.search}" async="true"
+                                     update="inventory"/>
+                </p:panelGrid>
+                <p:dataTable id="inventory" var="inventory" value="#{inventoryBean.inventories}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             paginator="true" rows="10" style="margin-bottom:20px" rowsPerPageTemplate="10,20,30">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.inventoryId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Name"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.employee.fullName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="CPR"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.employee.cpr}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Department"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.department}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Port"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.port}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Status"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.itemStatus}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Item"/>
+                        </f:facet>
+                        <h:outputText value="#{inventory.item.barcode}"/>
+                    </p:column>
+                    <p:column style="width:100px">
+                        <!--<p:commandButton update=":form2:displayTable" onclick="PF('detailsDialog').show();"-->
+                                         <!--icon="ui-icon ui-icon-pencil" title="Edit" resetValues="true">-->
+                            <!--<f:setPropertyActionListener value="#{inventory}" target="#{inventoryBean.selectedInventory}"/>-->
+                        <!--</p:commandButton>-->
+                        <p:commandButton icon="ui-icon ui-icon-close" title="Delete"
+                                         onclick="PF('confirmationDelete').show();">
+                            <f:setPropertyActionListener value="#{inventory}" target="#{inventoryBean.selectedInventory}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:confirmDialog width="300" showEffect="explode" hideEffect="explode"
+                                 message="Seriously dude, are you sure?"
+                                 widgetVar="confirmationDelete">
+                    <p:commandButton oncomplete="PF('confirmationDelete').hide();" update=":listForm"
+                                     actionListener="#{inventoryBean.remove}" value="Just delete it"/>
+                    <p:commandButton value="Hmm, nope" onclick="PF('confirmationDelete').hide();" type="button"/>
+                </p:confirmDialog>
+            </p:panel>
+            <h3>Export</h3>
+            <h:commandLink>
+                <p:graphicImage value="../img/excel.png" />
+                <p:dataExporter type="xls" target="inventory" fileName="inventory"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/pdf.png" />
+                <p:dataExporter type="pdf" target="inventory" fileName="inventory"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/csv.png" />
+                <p:dataExporter type="csv" target="inventory" fileName="inventory"/>
+            </h:commandLink>
+        </h:form>
+
+        <h:form id="form2">
+            <p:dialog header="Employee Details" widgetVar="detailsDialog"
+                      width="500" showEffect="fade" hideEffect="explode" modal="true" >
+                <h:panelGrid columns="2" columnClasses="label,value" styleClass="grid" id="displayTable">
+
+                    <p:outputLabel for="employee" value="Employee Name"/>
+                    <h:selectOneMenu id="employee" value="#{inventoryBean.selectedInventory.employee.employeeId}" required="true">
+                        <f:selectItems value="#{inventoryBean.allEmployee}" var="employee"
+                                       itemLabel="#{employee.fullName}" itemValue="#{employee.employeeId}"/>
+                    </h:selectOneMenu>
+                    <p:outputLabel for="department" value="Department"/>
+                    <p:inputText id="department" value="#{inventoryBean.selectedInventory.department}" required="true"/>
+
+                    <p:outputLabel for="status" value="Status"/>
+                    <p:inputText id="status" value="#{inventoryBean.selectedInventory.itemStatus}" size="32" required="true"/>
+
+                    <p:outputLabel for="port" value="port"/>
+                    <p:inputTextarea id="port" value="#{inventoryBean.selectedInventory.port}" size="32" maxlength="255"
+                                     required="true"/>
+                    <p:outputLabel for="item" value="Item"/>
+                    <h:selectOneMenu id="item" value="#{inventoryBean.selectedInventory.item.itemId}" required="true">
+                        <f:selectItems value="#{inventoryBean.allItem}" var="item"
+                                       itemLabel="#{item.barcode}" itemValue="#{item.itemId}"/>
+                    </h:selectOneMenu>
+
+                    <h:panelGroup>
+                        <h:panelGrid columns="2">
+                            <p:commandButton actionListener="#{inventoryBean.update}" oncomplete="PF('detailsDialog').hide();"
+                                             value="Update" update=":form1:messages" ajax="false"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

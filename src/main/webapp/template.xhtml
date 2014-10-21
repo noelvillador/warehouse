@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<c:set var="path" value="../"/>
+<f:view contentType="text/html">
+
+    <h:head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="${path}style/default.css" media="screen"/>
+        <title>Customs Inventory System</title>
+        <ui:insert name="head"/>
+        <style type="text/css">
+            .new {
+                background: url(${path}img/new.png) no-repeat center;
+            }
+
+            .search {
+                background: url(${path}img/search.png) no-repeat center;
+            ;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="outer-container">
+            <div class="inner-container">
+                <div class="header">
+                    <div class="title">
+                        <span class="sitename"><a>Customs Inventory System</a></span>
+
+                        <div class="slogan">(a.k.a. CIS)</div>
+                    </div>
+                </div>
+                <p:menubar id="menu">
+                    <p:submenu label="Employee">
+                        <p:menuitem value="Create" url="/employee/create.jsf" styleClass="new"/>
+                        <p:menuitem value="Manage" url="/employee/manage.jsf" styleClass="search"/>
+                    </p:submenu>
+                    <p:submenu label="Items">
+                        <p:menuitem value="Create" url="/item/create.jsf" styleClass="new"/>
+                        <p:menuitem value="Manage" url="/item/manage.jsf" styleClass="search"/>
+                    </p:submenu>
+                    <p:submenu label="Inventory">
+                        <p:menuitem value="Create" url="/inventory/create.jsf" styleClass="new"/>
+                        <p:menuitem value="Manage" url="/inventory/manage.jsf" styleClass="search"/>
+                    </p:submenu>
+                    <p:submenu label="Reports">
+                        <p:menuitem value="Employee List" url="/report/listemployee.jsf" styleClass="search"/>
+                        <p:menuitem value="Item List" url="/report/listitems.jsf" styleClass="search"/>
+                        <p:menuitem value="Inventory List" url="/report/listinventory.jsf" styleClass="search"/>
+                    </p:submenu>
+                    <p:submenu label="Options">
+                        <p:menuitem value="Change Password" url="/faces/user/change.jsf"/>
+                        <p:menuitem value="Logout" url="/logout"/>
+                    </p:submenu>
+                </p:menubar>
+
+                <div class="main">
+                    <div class="content">
+                        <ui:insert name="content">
+                        </ui:insert>
+                    </div>
+                    <div class="clearer"></div>
+                </div>
+
+                <div class="footer">
+                    <span class="left">Powered by <a>Maven Jetty PrimeFaces JSF Spring Hibernate(JPA 2.0) HSQLDB</a></span>
+                        <span class="right">
+                            <p:ajaxStatus>
+                                <f:facet name="start">
+                                    <h:graphicImage value="${path}img/loader.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">Status</f:facet>
+                            </p:ajaxStatus>
+                        </span>
+
+                    <div class="clearer"></div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</f:view>
+</html>

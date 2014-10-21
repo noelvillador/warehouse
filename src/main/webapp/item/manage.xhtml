@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false" id="listForm">
+            <p:panel id="panel" header="Search Item">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="content">
+                    <h:outputText value="Employee Name: "/>
+                    <p:autoComplete value="#{itemBean.barcode}"
+                                    completeMethod="#{itemBean.getByBarcode}"/>
+                    <p:commandButton value="Search" actionListener="#{itemBean.search}" async="true"
+                                     update="item"/>
+                </p:panelGrid>
+                <p:dataTable id="item" var="item" value="#{itemBean.items}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                             paginator="true" rows="10" style="margin-bottom:20px" rowsPerPageTemplate="10,20,30">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Id"/>
+                        </f:facet>
+                        <h:outputText value="#{item.itemId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Barcode"/>
+                        </f:facet>
+                        <h:outputText value="#{item.barcode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Description"/>
+                        </f:facet>
+                        <h:outputText value="#{item.description}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Date of Purchase"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dateOfPurchase}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Remarks"/>
+                        </f:facet>
+                        <h:outputText value="#{item.remarks}"/>
+                    </p:column>
+                    <p:column style="width:100px">
+                        <p:commandButton update=":form2:displayTable" onclick="PF('detailsDialog').show();"
+                                         icon="ui-icon ui-icon-pencil" title="Edit" resetValues="true">
+                            <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon ui-icon-close" title="Delete"
+                                         onclick="PF('confirmationDelete').show();">
+                            <f:setPropertyActionListener value="#{item}" target="#{itemBean.selectedItem}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:confirmDialog width="300" showEffect="explode" hideEffect="explode"
+                                 message="Seriously dude, are you sure?"
+                                 widgetVar="confirmationDelete">
+                    <p:commandButton oncomplete="PF('confirmationDelete').hide();" update=":listForm"
+                                     actionListener="#{itemBean.remove}" value="Just delete it"/>
+                    <p:commandButton value="Hmm, nope" onclick="PF('confirmationDelete').hide();" type="button"/>
+                </p:confirmDialog>
+            </p:panel>
+
+            <h3>Export</h3>
+            <h:commandLink>
+                <p:graphicImage value="../img/excel.png"/>
+                <p:dataExporter type="xls" target="employee" fileName="employee"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/pdf.png"/>
+                <p:dataExporter type="pdf" target="employee" fileName="employee"/>
+            </h:commandLink>
+
+            <h:commandLink>
+                <p:graphicImage value="../img/csv.png"/>
+                <p:dataExporter type="csv" target="employee" fileName="employee"/>
+            </h:commandLink>
+        </h:form>
+
+        <h:form id="form2">
+            <p:dialog header="Employee Details" widgetVar="detailsDialog"
+                      width="500" showEffect="fade" hideEffect="explode" modal="true">
+                <h:panelGrid columns="2" columnClasses="label,value" styleClass="grid" id="displayTable">
+
+                    <p:outputLabel for="barcode" value="Barcode"/>
+                    <p:inputText id="barcode" value="#{itemBean.selectedItem.barcode}" required="true"/>
+
+                    <p:outputLabel for="description" value="Description"/>
+                    <p:inputText id="description" value="#{itemBean.selectedItem.description}" size="32"
+                                 required="true"/>
+
+                    <p:outputLabel for="dateOfPurchase" value="Date of Purchase"/>
+                    <p:calendar id="dateOfPurchase" pattern="MM/dd/yyyy" value="#{itemBean.selectedItem.dateOfPurchase}"
+                                required="true"/>
+
+                    <p:outputLabel for="remarks" value="Remarks"/>
+                    <p:inputTextarea id="remarks" value="#{itemBean.selectedItem.remarks}" size="32" maxlength="255"
+                                     required="true"/>
+
+                    <h:panelGroup>
+                        <h:panelGrid columns="2">
+                            <p:commandButton actionListener="#{itemBean.update}"
+                                             oncomplete="PF('detailsDialog').hide();"
+                                             value="Update" update=":form1:messages" ajax="false"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

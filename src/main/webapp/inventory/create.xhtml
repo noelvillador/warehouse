@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/template.xhtml">
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <p:panel id="panel" header="New Item">
+                <p:growl showDetail="true"/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+                <p:panelGrid columns="2" columnClasses="label,value" styleClass="content">
+
+                    <p:outputLabel for="employee" value="Employee Name"/>
+                    <h:selectOneMenu id="employee" value="#{inventoryBean.employeeId}" required="true">
+                        <f:selectItems value="#{inventoryBean.allEmployee}" var="employee"
+                                       itemLabel="#{employee.fullName}" itemValue="#{employee.employeeId}"/>
+                    </h:selectOneMenu>
+                    <p:outputLabel for="department" value="Department"/>
+                    <p:inputText id="department" value="#{inventoryBean.inventory.department}" required="true"/>
+
+                    <p:outputLabel for="status" value="Status"/>
+                    <p:inputText id="status" value="#{inventoryBean.inventory.itemStatus}" size="32" required="true"/>
+
+                    <p:outputLabel for="port" value="port"/>
+                    <p:inputText id="port" value="#{inventoryBean.inventory.port}" size="32" maxlength="255"
+                                     required="true"/>
+                    <p:outputLabel for="item" value="Item"/>
+                    <h:selectOneMenu id="item" value="#{inventoryBean.itemId}" required="true">
+                        <f:selectItems value="#{inventoryBean.allItem}" var="item"
+                                       itemLabel="#{item.barcode}" itemValue="#{item.itemId}"/>
+                    </h:selectOneMenu>
+
+                    <p:spacer/>
+                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                        <p:commandButton value="Reset" type="reset" icon="ui-icon-refresh"/>
+                        <p:commandButton value="Save" actionListener="#{inventoryBean.save}" ajax="true"
+                                         icon="ui-icon-disk" update="panel"/>
+                    </h:panelGrid>
+
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
