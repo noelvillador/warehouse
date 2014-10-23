@@ -56,6 +56,11 @@
     <security:http auto-config='true'>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
         <security:logout logout-url="/logout" logout-success-url="/"/>
+        <security:form-login
+                login-page="/spring_security_login"
+                always-use-default-target="true"
+                default-target-url="/welcome.jsf"
+                authentication-failure-url="/"/>
     </security:http>
 
     <security:authentication-manager alias="authenticationManager">
