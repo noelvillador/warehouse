@@ -111,12 +111,13 @@ h1, h2, h3 {
     background: #222 url('../img/header.jpg') no-repeat;
     height: 160px;
     margin-bottom: 5px;
-    text-align: center;
+    text-align: right;
 }
 
 .header .title {
     color: #FFF;
     padding-top: 50px;
+    font-size: 10px;
 }
 
 .header .title .sitename a {
